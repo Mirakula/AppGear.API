@@ -1,4 +1,7 @@
-﻿$HEADER$namespace $NAMESPACE$
+﻿namespace AppGear.API.Controllers
 {
-  public class $CLASS$ {$END$}
+    public class LorawanController
+    {
+        
+    }
 }
