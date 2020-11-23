@@ -1,6 +1,6 @@
 ﻿namespace AppGear.API.DTOs
 {
-    public class LorawanDTO
+    public class LoriotTestDTO
     {
         
     }

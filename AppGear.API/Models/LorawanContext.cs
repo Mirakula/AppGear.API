@@ -10,6 +10,7 @@ namespace AppGear.API.Models
             
         }
 
-        public DbSet<Lorawan> Lorawans { get; set; }
+        public DbSet<LoriotTest> LoriotsTest { get; set; }
+        public DbSet<LoriotProduction> LoriotsProduction { get; set; }
     }
 }

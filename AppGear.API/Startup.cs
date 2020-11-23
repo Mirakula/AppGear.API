@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AppGear.API.Models;
 using AppGear.API.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace AppGear.API
 {
@@ -32,15 +25,23 @@ namespace AppGear.API
             services.AddDbContext<LorawanContext>(options => options.UseSqlServer(
                 Configuration.GetConnectionString("LoraWanDb")));
 
-            services.AddScoped<ILorawanRepository, LorawanRepository>();
+            services.AddScoped<ILoriotTestRepository, LoriotTestRepository>();
+            services.AddScoped<ILoriotProductionRepository, LoriotProductionRepository>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+
+            // Potvrda da je baza podataka napravljena preko EF Core
+            // Ako nije onda je EF Core napravi sam
+            using (var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                scope.ServiceProvider.GetRequiredService<LorawanContext>().Database.Migrate();
+                scope.ServiceProvider.GetRequiredService<LorawanContext>().Database.EnsureCreated();
             }
 
             app.UseHttpsRedirection();
