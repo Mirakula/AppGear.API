@@ -30,7 +30,7 @@ namespace AppGear.API.Controllers
                 if (loraWanList == null)
                     NotFound();
 
-                return Ok();
+                return Ok(loraWanList);
             }
             catch (System.Exception e)
             {
@@ -48,7 +48,7 @@ namespace AppGear.API.Controllers
                 if (loraWan == null)
                     return NotFound();
 
-                return Ok();
+                return Ok(loraWan);
             }
             catch (System.Exception e)
             {

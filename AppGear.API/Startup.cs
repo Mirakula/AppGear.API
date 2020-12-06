@@ -16,9 +16,8 @@ namespace AppGear.API
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
+        public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
@@ -27,6 +26,8 @@ namespace AppGear.API
 
             services.AddScoped<ILoriotTestRepository, LoriotTestRepository>();
             services.AddScoped<ILoriotProductionRepository, LoriotProductionRepository>();
+            services.AddScoped<ILoriotDecoderRepository, LoriotDecoderRepository>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

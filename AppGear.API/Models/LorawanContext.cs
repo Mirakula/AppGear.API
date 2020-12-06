@@ -12,5 +12,6 @@ namespace AppGear.API.Models
 
         public DbSet<LoriotTest> LoriotsTest { get; set; }
         public DbSet<LoriotProduction> LoriotsProduction { get; set; }
+        public DbSet<LoriotDecodeModel> LoriotDecoded { get; set; }
     }
 }

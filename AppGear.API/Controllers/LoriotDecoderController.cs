@@ -1,13 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
+using AppGear.API.Models;
+using AppGear.API.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AppGear.API.Controllers
 {
-    public class LoriotDecoder : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class LoriotDecoderController : ControllerBase
     {
-        // GET
-        public IActionResult Index()
+        private readonly ILoriotDecoderRepository _decoder;
+        
+        public LoriotDecoderController(ILoriotDecoderRepository decoder)
         {
-            return View();
+            _decoder = decoder;
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> DecodeData(LoriotTest loriotTest)
+        {
+            var decodeModel = await _decoder.UnpackData(loriotTest.data);
+
+            try
+            {
+                _decoder.Post(decodeModel);
+            }
+            catch (Exception e)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

@@ -10,10 +10,12 @@ namespace AppGear.API.Repositories
     {
 
         private readonly LorawanContext _databaseContext;
+        private readonly ILoriotDecoderRepository _decoder;
 
-        public LoriotProductionRepository(LorawanContext databaseContext)
+        public LoriotProductionRepository(LorawanContext databaseContext, ILoriotDecoderRepository decoder)
         {
             _databaseContext = databaseContext;
+            _decoder = decoder;
         }
 
         public List<LoriotProduction> Get()
@@ -26,12 +28,19 @@ namespace AppGear.API.Repositories
             return _databaseContext.LoriotsProduction.FirstOrDefault(x => x.Id == id);
         }
 
-        public void Post(LoriotProduction loriotProduction)
+        public async void Post(LoriotProduction loriotProduction)
         {
             _databaseContext.Add(loriotProduction);
             _databaseContext.SaveChanges();
-        }
 
+            if (loriotProduction.cmd == "rx")
+            {
+                var decodeModel = await _decoder.UnpackData(loriotProduction.data);
+                _databaseContext.LoriotDecoded.Add(decodeModel);
+                _databaseContext.SaveChanges();
+            }
+        }
+        
         public void Put(LoriotProductionDTO loriotProductionDto, int id)
         {
             throw new NotImplementedException();
