@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AppGear.API.DTOs;
 using AppGear.API.Models;
+using AppGear.API.Services;
+using Microsoft.AspNetCore.SignalR;
 
 namespace AppGear.API.Repositories
 {
-    public class LoriotProductionRepository : ILoriotProductionRepository
+    public class LoriotProductionRepository : Hub, ILoriotProductionRepository
     {
 
         private readonly LorawanContext _databaseContext;
@@ -30,17 +33,16 @@ namespace AppGear.API.Repositories
 
         public async void Post(LoriotProduction loriotProduction)
         {
-            _databaseContext.Add(loriotProduction);
-            _databaseContext.SaveChanges();
-
             if (loriotProduction.cmd == "rx")
             {
-                var decodeModel = await _decoder.UnpackData(loriotProduction.data);
-                _databaseContext.LoriotDecoded.Add(decodeModel);
-                _databaseContext.SaveChanges();
+                var decoderModel = await _decoder.UnpackData(loriotProduction.data, loriotProduction.EUI);
+                _decoder.Post(decoderModel);
             }
+
+            _databaseContext.Add(loriotProduction);
+            _databaseContext.SaveChanges();
         }
-        
+
         public void Put(LoriotProductionDTO loriotProductionDto, int id)
         {
             throw new NotImplementedException();

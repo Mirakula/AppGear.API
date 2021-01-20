@@ -1,5 +1,6 @@
 using AppGear.API.Models;
 using AppGear.API.Repositories;
+using AppGear.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,9 @@ namespace AppGear.API
             services.AddScoped<ILoriotTestRepository, LoriotTestRepository>();
             services.AddScoped<ILoriotProductionRepository, LoriotProductionRepository>();
             services.AddScoped<ILoriotDecoderRepository, LoriotDecoderRepository>();
+            services.AddScoped<IBusCapacaityCalculator, BusCapacityCalculator>();
 
+            services.AddSignalR();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,13 +48,14 @@ namespace AppGear.API
                 scope.ServiceProvider.GetRequiredService<LorawanContext>().Database.EnsureCreated();
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

@@ -18,9 +18,9 @@ namespace AppGear.API.Controllers
         }
         
         [HttpPost]
-        public async Task<IActionResult> DecodeData(LoriotTest loriotTest)
+        public async Task<IActionResult> DecodeData(LoriotProduction loriotProduction)
         {
-            var decodeModel = await _decoder.UnpackData(loriotTest.data);
+            var decodeModel = await _decoder.UnpackData(loriotProduction.data, loriotProduction.EUI);
 
             try
             {
@@ -28,7 +28,7 @@ namespace AppGear.API.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest();
+                return BadRequest(e.Message);
             }
 
             return Ok();

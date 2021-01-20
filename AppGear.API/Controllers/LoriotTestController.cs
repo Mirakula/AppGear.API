@@ -2,7 +2,6 @@
 using AppGear.API.Models;
 using AppGear.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace AppGear.API.Controllers
 {
@@ -79,7 +78,7 @@ namespace AppGear.API.Controllers
                 _loriotTestRepository.Delete(loriot);
                 return Ok();
             }
-            catch (System.Exception e)
+            catch (Exception e)
             {
                 return BadRequest(e.Message);
             }

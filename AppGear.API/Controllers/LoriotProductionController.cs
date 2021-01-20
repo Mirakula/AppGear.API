@@ -1,23 +1,30 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AppGear.API.Models;
 using AppGear.API.Repositories;
+using AppGear.API.Services;
+using Microsoft.AspNetCore.SignalR;
 
 namespace AppGear.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController] 
     public class LoriotProductionController : ControllerBase
     {
         private readonly ILoriotProductionRepository _loriotProductionRepository;
 
-        public LoriotProductionController(ILoriotProductionRepository loriotRepository)
+        private readonly ILoriotDecoderRepository _decoder;
+        private readonly IBusCapacaityCalculator _busCapacaity;
+
+
+        public LoriotProductionController(ILoriotProductionRepository loriotRepository, 
+                ILoriotDecoderRepository decoder, IBusCapacaityCalculator busCapacaity)
         {
             _loriotProductionRepository = loriotRepository;
+            _decoder = decoder;
+            _busCapacaity = busCapacaity;
         }
 
         //Read
@@ -57,11 +64,12 @@ namespace AppGear.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(LoriotProduction loriot)
+        public async Task<IActionResult> Post(LoriotProduction loriot)
         {
             try
             {
                 _loriotProductionRepository.Post(loriot);
+
                 return Ok();
             }
             catch (System.Exception e)
@@ -91,7 +99,5 @@ namespace AppGear.API.Controllers
         {
             throw new NotImplementedException();
         }
-
-
     }
 }

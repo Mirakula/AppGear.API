@@ -2,19 +2,23 @@
 using System.Globalization;
 using System.Threading.Tasks;
 using AppGear.API.Models;
+using AppGear.API.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AppGear.API.Repositories
 {
     public class LoriotDecoderRepository : ILoriotDecoderRepository
     {
         private readonly LorawanContext _databaseContext;
+        private readonly IBusCapacaityCalculator _busCapacaity;
         
-        public LoriotDecoderRepository(LorawanContext databaseContext)
+        public LoriotDecoderRepository(LorawanContext databaseContext, IBusCapacaityCalculator busCapacaity)
         {
             _databaseContext = databaseContext;
+            _busCapacaity = busCapacaity;
         }
 
-        public async Task<LoriotDecodeModel> UnpackData(string data)
+        public async Task<LoriotDecodeModel> UnpackData(string data, string deviceEUI)
         {
             var decodeModel = new LoriotDecodeModel();
 
@@ -52,6 +56,8 @@ namespace AppGear.API.Repositories
                     decodeModel.DailyCyclesCount = BitConverter.ToUInt16(dailyCycleCount);
                 }
             }
+
+            decodeModel.DeviceEUI = deviceEUI;
             return await Task.FromResult(decodeModel);
         }
 

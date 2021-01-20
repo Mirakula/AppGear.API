@@ -11,6 +11,8 @@ namespace AppGear.API.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        [Column("EUI")] 
+        public string DeviceEUI { get; set; }
         [Column("DailyCyclesCount")]
         public UInt16 DailyCyclesCount { get; set; }
         [Column("CycleEventsCount")]
@@ -23,5 +25,7 @@ namespace AppGear.API.Models
         public UInt32 TimeStamp { get; set; }
         [Column("Date")]
         public DateTimeOffset ToDate { get; set; }
+        [Column("Procenat")]
+        public double Procenat { get; set; }
     }
 }

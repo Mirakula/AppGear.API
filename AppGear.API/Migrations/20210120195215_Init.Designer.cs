@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppGear.API.Migrations
 {
     [DbContext(typeof(LorawanContext))]
-    [Migration("20201206153208_HexDecoderTables")]
-    partial class HexDecoderTables
+    [Migration("20210120195215_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,6 +45,14 @@ namespace AppGear.API.Migrations
                         .HasColumnName("DailyEventsCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("DeviceEUI")
+                        .HasColumnName("EUI")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("Procenat")
+                        .HasColumnName("Procenat")
+                        .HasColumnType("float");
+
                     b.Property<long>("TimeStamp")
                         .HasColumnName("TimeStamp")
                         .HasColumnType("bigint");
@@ -56,6 +64,68 @@ namespace AppGear.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("LoriotDecoded");
+                });
+
+            modelBuilder.Entity("AppGear.API.Models.LoriotDevice", b =>
+                {
+                    b.Property<string>("DEV_ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnName("DEV_ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("APP_EUI")
+                        .HasColumnName("APP_EUI")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("APP_KEY")
+                        .HasColumnName("APP_KEY")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DEV_EUI")
+                        .HasColumnName("DEV_EUI")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PCB_ID")
+                        .HasColumnName("PCB_ID")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("DEV_ID");
+
+                    b.ToTable("LoriotDevices");
+
+                    b.HasData(
+                        new
+                        {
+                            DEV_ID = "MMD1001001991",
+                            APP_EUI = "050600000000FFFF",
+                            APP_KEY = "0004A30B0007D5C588A783A1A7A0E3A1",
+                            DEV_EUI = "0004A30B0007D5C5",
+                            PCB_ID = "MMP1601003746"
+                        },
+                        new
+                        {
+                            DEV_ID = "MMD1001001992",
+                            APP_EUI = "050600000000FFFF",
+                            APP_KEY = "0004A30B0007932B88A783A1A7A0E3A1",
+                            DEV_EUI = "0004A30B0007932B",
+                            PCB_ID = "MMP1601003747"
+                        },
+                        new
+                        {
+                            DEV_ID = "MMD1001001993",
+                            APP_EUI = "050600000000FFFF",
+                            APP_KEY = "0004A30B0007C3BE88A783A1A7A0E3A1",
+                            DEV_EUI = "0004A30B0007C3BE",
+                            PCB_ID = "MMP1601003748"
+                        },
+                        new
+                        {
+                            DEV_ID = "MMD1001001994",
+                            APP_EUI = "050600000000FFFF",
+                            APP_KEY = "0004A30B0007FE0788A783A1A7A0E3A1",
+                            DEV_EUI = "0004A30B0007FE07",
+                            PCB_ID = "MMP1601003749"
+                        });
                 });
 
             modelBuilder.Entity("AppGear.API.Models.LoriotProduction", b =>
